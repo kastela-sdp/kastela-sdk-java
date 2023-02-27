@@ -28,12 +28,16 @@ public class Client {
   private String vaultPath = "/api/vault/";
   private String protectionPath = "/api/protection/";
   private String privacyProxy = "/api/proxy/";
-  private String secureChannelPath = "/api/secure-channel/";
+  private String securePath = "/api/secure/";
 
   private HttpClient httpClient;
   private String kastelaUrl;
 
   private static Gson gson = new Gson();
+
+  enum secureOperation{
+    READ, WRITE
+  }
 
   public Client(String kastelaUrl, String clientCertPath, String clientKeyPath, String caCertPath) {
     this.kastelaUrl = kastelaUrl;
@@ -179,22 +183,25 @@ public class Client {
     return data;
   }
 
-  public Map<String, Object> secureChannelBegin(String protectionId, String clientPublicKey, Integer ttl)
-      throws Exception {
+  public Map<String, Object> secureProtectionInit(
+    secureOperation operation, ArrayList<String> protectionIds, Integer ttl
+  ) throws Exception {
     Map<String, Object> result = new HashMap<>();
     Map<String, Object> payload = new HashMap<>();
-    payload.put("protection_id", protectionId);
-    payload.put("client_public_key", clientPublicKey);
+    payload.put("operation", operation);
+    payload.put("protection_ids", protectionIds);
     payload.put("ttl", ttl);
 
-    Map<String, Object> data = request("post", URI.create(kastelaUrl.concat(secureChannelPath).concat("begin")),
-        payload);
-    result.put("id", data.get("id"));
-    result.put("serverPublicKey", data.get("server_public_key"));
+    Map<String, Object> response = request("post", URI.create(kastelaUrl.concat(securePath).concat("protection/init")), payload);
+    result.put("credential", response.get("credential"));
+
     return result;
   }
 
-  public void secureChannelCommit(String secureChannelId) throws Exception {
-    request("post", URI.create(kastelaUrl.concat(secureChannelPath).concat(secureChannelId).concat("/commit")), null);
+  public void secureProtectionCommit(String credential) throws Exception {
+    Map<String, Object> payload = new HashMap<>();
+    payload.put("credential", credential);
+
+    request("post", URI.create(kastelaUrl.concat(securePath).concat("protection/commit")), payload);
   }
 }

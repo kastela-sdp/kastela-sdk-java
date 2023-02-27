@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.hash.app.Client.secureOperation;
 
 import static spark.Spark.*;
 
@@ -13,12 +14,12 @@ public class App {
 
     public static void main(String[] args) throws Exception {
 
-        Client kastelaClient = new Client("https://127.0.0.1:3100", "client.crt",
-                "client.key", "ca.crt");
+        Client kastelaClient = new Client("https://127.0.0.1:3100", "credentials/client.crt",
+                "credentials/client.key", "credentials/ca.crt");
 
         port(4000);
 
-        post("/vault/:vaultId/store", (req, res) -> {
+        post("/api/vault/:vaultId/store", (req, res) -> {
             res.header("Content-Type", "application/json");
             ArrayList<Object> payload = gson.fromJson(req.body(), new TypeToken<ArrayList<Object>>() {
             }.getType());
@@ -27,7 +28,7 @@ public class App {
             String resultJson = gson.toJson(resultStore);
             return resultJson;
         });
-        post("/vault/:vaultId/get", (req, res) -> {
+        post("/api/vault/:vaultId/get", (req, res) -> {
             res.header("Content-Type", "application/json");
             ArrayList<String> ids = gson.fromJson(req.body(), new TypeToken<ArrayList<String>>() {
             }.getType());
@@ -35,14 +36,14 @@ public class App {
             String result = gson.toJson(resultGet);
             return result;
         });
-        put("/vault/:vaultId/:token", (req, res) -> {
+        put("/api/vault/:vaultId/:token", (req, res) -> {
             res.header("Content-Type", "application/json");
             Map<String, Object> payload = gson.fromJson(req.body(), new TypeToken<HashMap<String, Object>>() {
             }.getType());
             kastelaClient.vaultUpdate(req.params(":vaultId"), req.params(":token"), payload);
             return "OK";
         });
-        get("/vault/:vaultId", (req, res) -> {
+        get("/api/vault/:vaultId", (req, res) -> {
             res.header("Content-Type", "application/json");
 
             Integer size = 0;
@@ -54,20 +55,20 @@ public class App {
             String resultJson = gson.toJson(result);
             return resultJson;
         });
-        delete("/vault/:vaultId/:token", (req, res) -> {
+        delete("/api/vault/:vaultId/:token", (req, res) -> {
             res.header("Content-Type", "application/json");
             kastelaClient.vaultDelete(req.params(":vaultId"), req.params(":token"));
             return "OK";
         });
 
-        post("/protection/:protectionId/seal", (req, res) -> {
+        post("/api/protection/:protectionId/seal", (req, res) -> {
             res.header("Content-Type", "application/json");
             ArrayList<Object> ids = gson.fromJson(req.body(), new TypeToken<ArrayList<Object>>() {
             }.getType());
             kastelaClient.protectionSeal(req.params(":protectionId"), ids);
             return "OK";
         });
-        post("/protection/:protectionId/open", (req, res) -> {
+        post("/api/protection/:protectionId/open", (req, res) -> {
             res.header("Content-Type", "application/json");
             ArrayList<Object> ids = gson.fromJson(req.body(), new TypeToken<ArrayList<Object>>() {
             }.getType());
@@ -76,7 +77,7 @@ public class App {
             return resultJson;
         });
 
-        post("/proxy", (req, res) -> {
+        post("/api/proxy", (req, res) -> {
             res.header("Content-Type", "application/json");
             Map<String, Object> payload = gson.fromJson(req.body(), new TypeToken<Map<String, Object>>() {
             }.getType());
@@ -95,7 +96,7 @@ public class App {
             return resultJson;
         });
 
-        post("/secure-channel/begin", (req, res) -> {
+        post("/api/secure/protection/init", (req, res) -> {
             res.header("Content-Type", "application/json");
             Map<String, Object> result = new HashMap<>();
             try {
@@ -106,9 +107,8 @@ public class App {
                 if (payload.get("ttl") != null) {
                     ttl = ttlD.intValue();
                 }
-                result = kastelaClient.secureChannelBegin(payload.get("protectionId").toString(),
-                        payload.get("clientPublicKey").toString(), ttl);
-
+                result = kastelaClient.secureProtectionInit(secureOperation.valueOf(payload.get("operation").toString()),
+                        (ArrayList<String>) payload.get("protection_ids"), ttl);
             } catch (Exception e) {
                 result.put("error", e.toString());
                 res.status(500);
@@ -116,11 +116,13 @@ public class App {
             String resultJson = gson.toJson(result);
             return resultJson;
         });
-        post("/secure-channel/:secureChannelId/commit", (req, res) -> {
+        post("/api/secure/protection/commit", (req, res) -> {
             res.header("Content-Type", "application/json");
             Map<String, Object> result = new HashMap<>();
+            Map<String, Object> payload = gson.fromJson(req.body(), new TypeToken<Map<String, Object>>() {
+            }.getType());
             try {
-                kastelaClient.secureChannelCommit(req.params(":secureChannelId"));
+                kastelaClient.secureProtectionCommit(payload.get("credential").toString());
                 result.put("status", "OK");
             } catch (Exception e) {
                 result.put("error", e.toString());
