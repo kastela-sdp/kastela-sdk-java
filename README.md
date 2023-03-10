@@ -4,15 +4,30 @@
 
 - [API docs](https://kastela-sdp.github.io/kastela-sdk-java/com/hash/app/package-summary.html)
 - [Packages](https://github.com/kastela-sdp/kastela-sdk-java/packages/1809462)
+- [Guide to use Personal Access Token](https://github.com/jcansdale-test/maven-consume)
 
 ## Installation
 1. Add to pom.mls (check the latest version [here](https://github.com/kastela-sdp/kastela-sdk-java/packages/1809462))
 ```
-<dependency>
-  <groupId>com.hash.app</groupId>
-  <artifactId>kastela-sdk-java</artifactId>
-  <version>0.3.0</version> 
-</dependency>
+<dependencies>
+  ...
+  <dependency>
+    <groupId>id.hash.kastela</groupId>
+    <artifactId>kastela-sdk-java</artifactId>
+    <version>0.3.1</version> 
+  </dependency>
+  ...
+</dependencies>
+
+<repositories>
+  ...
+  <repository>
+    <id>github</id>
+    <name>GitHub kastela-sdp Apache Maven Packages</name>
+    <url>https://maven.pkg.github.com/kastela-sdp/*</url>
+  </repository>
+  ...
+</repositories>
 ```
 2. Run
 ```
