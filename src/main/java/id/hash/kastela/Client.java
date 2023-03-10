@@ -1,4 +1,4 @@
-package com.hash.app;
+package id.hash.kastela;
 
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -17,7 +17,6 @@ import javax.net.ssl.X509ExtendedTrustManager;
 
 import com.github.zafarkhaja.semver.Version;
 import com.google.gson.Gson;
-import com.google.gson.annotations.SerializedName;
 import com.google.gson.reflect.TypeToken;
 
 import nl.altindag.ssl.SSLFactory;
@@ -34,6 +33,18 @@ public class Client {
   private String kastelaUrl;
 
   private static Gson gson = new Gson();
+
+  public enum SecureOperation {
+    READ, WRITE
+  }
+
+  public enum PrivacyProxyRequestType {
+    json, xml
+  }
+
+  public enum PrivacyProxyRequestMethod {
+    get, post, put, delete, patch
+  }
 
   public Client(String kastelaUrl, String clientCertPath, String clientKeyPath, String caCertPath) {
     this.kastelaUrl = kastelaUrl;
@@ -172,254 +183,5 @@ public class Client {
     payload.put("credential", credential);
 
     request("post", URI.create(kastelaUrl.concat(securePath).concat("protection/commit")), payload);
-  }
-}
-
-enum SecureOperation {
-  READ, WRITE
-}
-
-enum PrivacyProxyRequestType {
-  json, xml
-}
-
-enum PrivacyProxyRequestMethod {
-  get, post, put, delete, patch
-}
-
-class VaultDeleteInput {
-  @SerializedName("vault_id")
-  private String vaultID;
-  private String[] tokens;
-
-  public VaultDeleteInput(String vaultID, String[] tokens) {
-    this.vaultID = vaultID;
-    this.tokens = tokens;
-  }
-
-  public void setVaultID(String vaultID) {
-    this.vaultID = vaultID;
-  }
-
-  public void setTokens(String[] tokens) {
-    this.tokens = tokens;
-  }
-
-  public String getVaultID() {
-    return vaultID;
-  }
-
-  public String[] getTokens() {
-    return tokens;
-  }
-}
-
-class VaultFetchInput {
-  @SerializedName("vault_id")
-  private String vaultID;
-  private Object search;
-  private Integer size;
-  private String after;
-
-  public VaultFetchInput(String vaultID, Object search, Integer size, String after) {
-    this.vaultID = vaultID;
-    this.search = search;
-    this.size = size;
-    this.after = after;
-  }
-
-  public void setVaultID(String vaultID) {
-    this.vaultID = vaultID;
-  }
-
-  public void setSearch(Object search) {
-    this.search = search;
-  }
-
-  public void setAfter(String after) {
-    this.after = after;
-  }
-
-  public void setSize(Integer size) {
-    this.size = size;
-  }
-
-  public String getVaultID() {
-    return vaultID;
-  }
-
-  public Object getSearch() {
-    return search;
-  }
-
-  public Integer getSize() {
-    return size;
-  }
-
-  public String getAfter() {
-    return after;
-  }
-}
-
-class VaultGetInput {
-  @SerializedName("vault_id")
-  private String vaultID;
-  private String[] tokens;
-
-  public VaultGetInput(String vaultID, String[] tokens) {
-    this.vaultID = vaultID;
-    this.tokens = tokens;
-  }
-
-  public void setVaultID(String vaultID) {
-    this.vaultID = vaultID;
-  }
-
-  public void setTokens(String[] tokens) {
-    this.tokens = tokens;
-  }
-
-  public String getVaultID() {
-    return vaultID;
-  }
-
-  public String[] getTokens() {
-    return tokens;
-  }
-}
-
-class VaultStoreInput {
-  @SerializedName("vault_id")
-  private String vaultID;
-  private Object[] values;
-
-  public VaultStoreInput(String vaultID, Object[] values) {
-    this.vaultID = vaultID;
-    this.values = values;
-  }
-
-  public void setVaultID(String vaultID) {
-    this.vaultID = vaultID;
-  }
-
-  public void setValues(Object[] values) {
-    this.values = values;
-  }
-
-  public String getVaultID() {
-    return vaultID;
-  }
-
-  public Object[] getValues() {
-    return values;
-  }
-}
-
-class VaultUpdateInput {
-  @SerializedName("vault_id")
-  private String vaultID;
-  private ArrayList<VaultUpdateInputValues> values;
-
-  public VaultUpdateInput(String vaultID, ArrayList<VaultUpdateInputValues> values) {
-    this.vaultID = vaultID;
-    this.values = values;
-  }
-
-  public void setVaultID(String vaultID) {
-    this.vaultID = vaultID;
-  }
-
-  public void setValues(ArrayList<VaultUpdateInputValues> values) {
-    this.values = values;
-  }
-
-  public String getVaultID() {
-    return vaultID;
-  }
-
-  public ArrayList<VaultUpdateInputValues> getValues() {
-    return values;
-  }
-
-}
-
-class VaultUpdateInputValues {
-  private String token;
-  private Object value;
-
-  public VaultUpdateInputValues(String token, Object value) {
-    this.token = token;
-    this.value = value;
-  }
-
-  public void setToken(String token) {
-    this.token = token;
-  }
-
-  public void setValue(Object value) {
-    this.value = value;
-  }
-
-  public String getToken() {
-    return token;
-  }
-
-  public Object getValue() {
-    return value;
-  }
-}
-
-class ProtectionSealInput {
-  @SerializedName("protection_id")
-  private String protectionID;
-  @SerializedName("primary_keys")
-  private Object[] primaryKeys;
-
-  public ProtectionSealInput(String protectionID, Object[] primaryKeys) {
-    this.protectionID = protectionID;
-    this.primaryKeys = primaryKeys;
-  }
-
-  public void setProtectionID(String protectionID) {
-    this.protectionID = protectionID;
-  }
-
-  public void setPrimaryKeys(Object[] primaryKeys) {
-    this.primaryKeys = primaryKeys;
-  }
-
-  public String getProtectionID() {
-    return protectionID;
-  }
-
-  public Object getPrimaryKeys() {
-    return primaryKeys;
-  }
-}
-
-class ProtectionOpenInput {
-  @SerializedName("protection_id")
-  private String protectionID;
-  private Object[] tokens;
-
-  public ProtectionOpenInput(String protectionID, Object[] tokens) {
-    this.protectionID = protectionID;
-    this.tokens = tokens;
-  }
-
-  public void setProtectionID(String protectionID) {
-    this.protectionID = protectionID;
-  }
-
-  public void setTokens(Object[] tokens) {
-    this.tokens = tokens;
-  }
-
-  public String getProtectionID() {
-    return protectionID;
-  }
-
-  public Object getTokens() {
-    return tokens;
   }
 }

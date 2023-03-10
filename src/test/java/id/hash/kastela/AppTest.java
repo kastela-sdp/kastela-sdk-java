@@ -1,4 +1,4 @@
-package com.hash.app;
+package id.hash.kastela;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -6,6 +6,10 @@ import java.util.Map;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import id.hash.kastela.Client.PrivacyProxyRequestMethod;
+import id.hash.kastela.Client.PrivacyProxyRequestType;
+import id.hash.kastela.Client.SecureOperation;
+
 import static spark.Spark.*;
 
 public class AppTest {
