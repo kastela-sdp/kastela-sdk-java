@@ -6,7 +6,7 @@
 
   <groupId>com.hash.app</groupId>
   <artifactId>kastela-sdk-java</artifactId>
-  <version>0.1.0</version>
+  <version>0.2.0</version>
 
   <name>kastela-sdk-java</name>
   <url>https://github.com/kastela-sdp/kastela-sdk-java</url>
