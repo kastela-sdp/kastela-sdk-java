@@ -2,8 +2,8 @@
 
 ## Related Link
 
-- [API docs](https://kastela-sdp.github.io/kastela-sdk-java/com/hash/app/package-summary.html)
-- [Packages](https://github.com/kastela-sdp/kastela-sdk-java/packages/1809462)
+- [API docs](https://kastela-sdp.github.io/kastela-sdk-java/id/hash/kastela/package-summary.html)
+- [Packages](https://github.com/kastela-sdp/kastela-sdk-java/packages/1809924)
 - [Guide to use Personal Access Token](https://github.com/jcansdale-test/maven-consume)
 
 ## Installation
@@ -14,7 +14,7 @@
   <dependency>
     <groupId>id.hash.kastela</groupId>
     <artifactId>kastela-sdk-java</artifactId>
-    <version>0.3.2</version> 
+    <version>0.3.3</version> 
   </dependency>
   ...
 </dependencies>
