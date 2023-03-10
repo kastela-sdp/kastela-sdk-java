@@ -11,7 +11,7 @@
 <dependency>
   <groupId>com.hash.app</groupId>
   <artifactId>kastela-sdk-java</artifactId>
-  <version>0.2.1</version> 
+  <version>0.3.0</version> 
 </dependency>
 ```
 2. Run
