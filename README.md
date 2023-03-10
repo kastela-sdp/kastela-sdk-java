@@ -1,8 +1,6 @@
 # KASTELA Server SDK for JAVA
 
-Credential is required when using the SDK, download it on the entities page.
-
-## Link
+## Related Link
 
 - [API docs](https://kastela-sdp.github.io/kastela-sdk-java/com/hash/app/package-summary.html)
 - [Packages](https://github.com/kastela-sdp/kastela-sdk-java/packages/1809462)
@@ -21,6 +19,7 @@ Credential is required when using the SDK, download it on the entities page.
 mvn install
 ```
 ## Usage Example
+Credential is required when using the SDK, download it on the entities page.
 
 ``` java
 // create new instance of Kastela Client
