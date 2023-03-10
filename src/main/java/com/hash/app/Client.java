@@ -136,7 +136,7 @@ public class Client {
     return result;
   }
 
-  public Object privacyProxyRequest(privacyProxyRequestType type, String url, privacyProxyRequestMethod method,
+  public Object privacyProxyRequest(PrivacyProxyRequestType type, String url, PrivacyProxyRequestMethod method,
       Map<String, Object> common,
       Map<String, Object> options) throws Exception {
 
@@ -153,7 +153,7 @@ public class Client {
   }
 
   public Map<String, Object> secureProtectionInit(
-      secureOperation operation, ArrayList<String> protectionIds, Integer ttl) throws Exception {
+      SecureOperation operation, ArrayList<String> protectionIds, Integer ttl) throws Exception {
     Map<String, Object> result = new HashMap<>();
     Map<String, Object> payload = new HashMap<>();
     payload.put("operation", operation);
@@ -175,15 +175,15 @@ public class Client {
   }
 }
 
-enum secureOperation {
+enum SecureOperation {
   READ, WRITE
 }
 
-enum privacyProxyRequestType {
+enum PrivacyProxyRequestType {
   json, xml
 }
 
-enum privacyProxyRequestMethod {
+enum PrivacyProxyRequestMethod {
   get, post, put, delete, patch
 }
 
