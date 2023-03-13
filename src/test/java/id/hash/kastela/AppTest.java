@@ -9,6 +9,8 @@ import com.google.gson.reflect.TypeToken;
 import id.hash.kastela.Client.PrivacyProxyRequestMethod;
 import id.hash.kastela.Client.PrivacyProxyRequestType;
 import id.hash.kastela.Client.SecureOperation;
+import id.hash.kastela.CryptoEncryptInput.EncryptionMode;
+import id.hash.kastela.CtryptoHMACInput.HashMode;
 
 import static spark.Spark.*;
 
@@ -21,6 +23,126 @@ public class AppTest {
                 "credentials/client.key", "credentials/ca.crt");
 
         port(4000);
+
+        post("/api/crypto/encrypt", (req, res) -> {
+            try {
+                res.header("Content-Type", "application/json");
+                ArrayList<Map<String, Object>> payload = gson.fromJson(req.body(),
+                        new TypeToken<ArrayList<Map<String, Object>>>() {
+                        }.getType());
+                ArrayList<CryptoEncryptInput> input = new ArrayList<CryptoEncryptInput>();
+
+                for (Map<String, Object> v : payload) {
+                    ArrayList<Object> values = (ArrayList<Object>) v.get("plaintexts");
+                    CryptoEncryptInput data = new CryptoEncryptInput((String) v.get("key_id"),
+                            EncryptionMode.valueOf((String) v.get("mode")),
+                            values.toArray());
+                    input.add(data);
+                }
+
+                ArrayList<ArrayList<String>> ciphertexts = kastelaClient.cryptoEncrypt(input);
+                String resultJson = gson.toJson(ciphertexts);
+                return resultJson;
+            } catch (Exception e) {
+                res.status(500);
+                return e.getMessage();
+            }
+        });
+
+        post("/api/crypto/decrypt", (req, res) -> {
+            try {
+                ArrayList<String> payload = gson.fromJson(req.body(),
+                        new TypeToken<ArrayList<String>>() {
+                        }.getType());
+                ArrayList<Object> plaintexts = kastelaClient.cryptoDecrypt(payload);
+                String resultJson = gson.toJson(plaintexts);
+                return resultJson;
+            } catch (Exception e) {
+                res.status(500);
+                return e.getMessage();
+            }
+        });
+
+        post("/api/crypto/hmac", (req, res) -> {
+            try {
+                res.header("Content-Type", "application/json");
+                ArrayList<Map<String, Object>> payload = gson.fromJson(req.body(),
+                        new TypeToken<ArrayList<Map<String, Object>>>() {
+                        }.getType());
+                ArrayList<CtryptoHMACInput> input = new ArrayList<CtryptoHMACInput>();
+
+                for (Map<String, Object> v : payload) {
+                    ArrayList<Object> values = (ArrayList<Object>) v.get("values");
+                    input.add(new CtryptoHMACInput((String) v.get("key_id"), HashMode.valueOf((String) v.get("mode")),
+                            values.toArray()));
+                }
+                ArrayList<ArrayList<String>> hashes = kastelaClient.cryptoHMAC(input);
+                String resultJson = gson.toJson(hashes);
+                return resultJson;
+            } catch (Exception e) {
+                res.status(500);
+                return e.getMessage();
+            }
+        });
+
+        post("/api/crypto/equal", (req, res) -> {
+            res.header("Content-Type", "application/json");
+            ArrayList<Map<String, Object>> payload = gson.fromJson(req.body(),
+                    new TypeToken<ArrayList<Map<String, Object>>>() {
+                    }.getType());
+            ArrayList<CryptoEqualInput> input = new ArrayList<CryptoEqualInput>();
+
+            for (Map<String, Object> v : payload) {
+                input.add(new CryptoEqualInput((String) v.get("hash"), v.get("value")));
+            }
+            try {
+                ArrayList<Boolean> result = kastelaClient.cryptoEqual(input);
+                String resultJson = gson.toJson(result);
+                return resultJson;
+            } catch (Exception e) {
+                res.status(500);
+                return e.getMessage();
+            }
+        });
+
+        post("/api/crypto/sign", (req, res) -> {
+            res.header("Content-Type", "application/json");
+            ArrayList<Map<String, Object>> payload = gson.fromJson(req.body(),
+                    new TypeToken<ArrayList<Map<String, Object>>>() {
+                    }.getType());
+            ArrayList<CryptoSignInput> input = new ArrayList<CryptoSignInput>();
+            for (Map<String, Object> v : payload) {
+                ArrayList<Object> values = (ArrayList<Object>) v.get("values");
+                input.add(new CryptoSignInput((String) v.get("key_id"), values.toArray()));
+            }
+            try {
+                ArrayList<ArrayList<String>> signatures = kastelaClient.cryptoSign(input);
+                String resultJson = gson.toJson(signatures);
+                return resultJson;
+            } catch (Exception e) {
+                res.status(500);
+                return e.getMessage();
+            }
+        });
+
+        post("/api/crypto/verify", (req, res) -> {
+            res.header("Content-Type", "application/json");
+            ArrayList<Map<String, Object>> payload = gson.fromJson(req.body(),
+                    new TypeToken<ArrayList<Map<String, Object>>>() {
+                    }.getType());
+            ArrayList<CryptoVerifyInput> input = new ArrayList<CryptoVerifyInput>();
+            for (Map<String, Object> r : payload) {
+                input.add(new CryptoVerifyInput((String) r.get("signature"), (Object) r.get("value")));
+            }
+            try {
+                ArrayList<Boolean> result = kastelaClient.cryptoVerify(input);
+                String resultJson = gson.toJson(result);
+                return resultJson;
+            } catch (Exception e) {
+                res.status(500);
+                return e.getMessage();
+            }
+        });
 
         post("/api/vault/store", (req, res) -> {
             res.header("Content-Type", "application/json");
