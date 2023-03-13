@@ -6,7 +6,7 @@
 
   <groupId>id.hash.kastela</groupId>
   <artifactId>kastela-sdk-java</artifactId>
-  <version>0.3.3</version>
+  <version>0.4.0</version>
 
   <name>kastela-sdk-java</name>
   <url>https://github.com/kastela-sdp/kastela-sdk-java</url>
@@ -26,11 +26,6 @@
   </distributionManagement>
 
   <dependencies>
-    <dependency>
-      <groupId>com.github.zafarkhaja</groupId>
-      <artifactId>java-semver</artifactId>
-      <version>0.9.0</version>
-    </dependency>
     <dependency>
       <groupId>com.google.code.gson</groupId>
       <artifactId>gson</artifactId>
