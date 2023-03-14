@@ -14,7 +14,7 @@
   <dependency>
     <groupId>id.hash.kastela</groupId>
     <artifactId>kastela-sdk-java</artifactId>
-    <version>0.4.0</version> 
+    <version>0.4.1</version> 
   </dependency>
   ...
 </dependencies>
