@@ -2,7 +2,7 @@ package id.hash.kastela;
 
 import com.google.gson.annotations.SerializedName;
 
-public class CtryptoHMACInput {
+public class CryptoHMACInput {
   public enum HashMode {
     BLAKE2B_256,
     BLAKE2B_512,
@@ -20,7 +20,7 @@ public class CtryptoHMACInput {
   private HashMode mode;
   private Object[] values;
 
-  public CtryptoHMACInput(String keyID, HashMode mode, Object[] values) {
+  public CryptoHMACInput(String keyID, HashMode mode, Object[] values) {
     this.keyID = keyID;
     this.mode = mode;
     this.values = values;
