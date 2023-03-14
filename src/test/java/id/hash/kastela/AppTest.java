@@ -10,7 +10,7 @@ import id.hash.kastela.Client.PrivacyProxyRequestMethod;
 import id.hash.kastela.Client.PrivacyProxyRequestType;
 import id.hash.kastela.Client.SecureOperation;
 import id.hash.kastela.CryptoEncryptInput.EncryptionMode;
-import id.hash.kastela.CtryptoHMACInput.HashMode;
+import id.hash.kastela.CryptoHMACInput.HashMode;
 
 import static spark.Spark.*;
 
@@ -69,11 +69,11 @@ public class AppTest {
                 ArrayList<Map<String, Object>> payload = gson.fromJson(req.body(),
                         new TypeToken<ArrayList<Map<String, Object>>>() {
                         }.getType());
-                ArrayList<CtryptoHMACInput> input = new ArrayList<CtryptoHMACInput>();
+                ArrayList<CryptoHMACInput> input = new ArrayList<CryptoHMACInput>();
 
                 for (Map<String, Object> v : payload) {
                     ArrayList<Object> values = (ArrayList<Object>) v.get("values");
-                    input.add(new CtryptoHMACInput((String) v.get("key_id"), HashMode.valueOf((String) v.get("mode")),
+                    input.add(new CryptoHMACInput((String) v.get("key_id"), HashMode.valueOf((String) v.get("mode")),
                             values.toArray()));
                 }
                 ArrayList<ArrayList<String>> hashes = kastelaClient.cryptoHMAC(input);

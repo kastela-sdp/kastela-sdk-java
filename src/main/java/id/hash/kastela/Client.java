@@ -116,7 +116,7 @@ public class Client {
     return result;
   }
 
-  public ArrayList<ArrayList<String>> cryptoHMAC(ArrayList<CtryptoHMACInput> input) throws Exception {
+  public ArrayList<ArrayList<String>> cryptoHMAC(ArrayList<CryptoHMACInput> input) throws Exception {
     Map<String, Object> rawData = request("post",
         URI.create(kastelaUrl.concat(cryptoPath).concat("hmac")),
         input);
