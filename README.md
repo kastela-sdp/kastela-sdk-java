@@ -7,33 +7,39 @@
 - [Guide to use Personal Access Token](https://github.com/jcansdale-test/maven-consume)
 
 ## Installation
-1. Add to pom.mls (check the latest version [here](https://github.com/kastela-sdp/kastela-sdk-java/packages/1809462))
-```
-<dependencies>
-  ...
-  <dependency>
-    <groupId>id.hash.kastela</groupId>
-    <artifactId>kastela-sdk-java</artifactId>
-    <version>0.4.1</version> 
-  </dependency>
-  ...
-</dependencies>
 
-<repositories>
-  ...
-  <repository>
-    <id>github</id>
-    <name>GitHub kastela-sdp Apache Maven Packages</name>
-    <url>https://maven.pkg.github.com/kastela-sdp/*</url>
-  </repository>
-  ...
-</repositories>
-```
+1. Add to pom.mls (check the latest version [here](https://github.com/kastela-sdp/kastela-sdk-java/packages/1809462))
+
+    ```java
+    <dependencies>
+      ...
+      <dependency>
+        <groupId>id.hash.kastela</groupId>
+        <artifactId>kastela-sdk-java</artifactId>
+        <version>0.5.0</version> 
+      </dependency>
+      ...
+    </dependencies>
+
+    <repositories>
+      ...
+      <repository>
+        <id>github</id>
+        <name>GitHub kastela-sdp Apache Maven Packages</name>
+        <url>https://maven.pkg.github.com/kastela-sdp/*</url>
+      </repository>
+      ...
+    </repositories>
+    ```
+
 2. Run
-```
-mvn install
-```
+
+    ```bash
+    mvn install
+    ```
+
 ## Usage Example
+
 Credential is required when using the SDK, download it on the entities page.
 
 ``` java
