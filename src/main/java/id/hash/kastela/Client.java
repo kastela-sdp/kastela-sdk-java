@@ -230,4 +230,19 @@ public class Client {
 
     request("post", URI.create(kastelaUrl.concat(securePath).concat("protection/commit")), payload);
   }
+
+  public Map<String, Object> secureVaultInit(
+      SecureOperation operation, ArrayList<String> vaultIds, Integer ttl) throws Exception {
+    Map<String, Object> result = new HashMap<>();
+    Map<String, Object> payload = new HashMap<>();
+    payload.put("operation", operation);
+    payload.put("vault_ids", vaultIds);
+    payload.put("ttl", ttl);
+
+    Map<String, Object> response = request("post", URI.create(kastelaUrl.concat(securePath).concat("vault/init")),
+        payload);
+    result.put("credential", response.get("credential"));
+
+    return result;
+  }
 }
