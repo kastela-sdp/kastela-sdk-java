@@ -6,7 +6,8 @@ public class CryptoEncryptInput {
   public enum EncryptionMode {
     AES_GCM,
     CHACHA20_POLY1305,
-    XCHACHA20_POLY1305
+    XCHACHA20_POLY1305,
+    RSA_OAEP
   }
 
   @SerializedName("key_id")
