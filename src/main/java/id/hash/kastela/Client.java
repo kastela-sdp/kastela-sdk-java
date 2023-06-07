@@ -182,6 +182,14 @@ public class Client {
         URI.create(kastelaUrl.concat(vaultPath).concat("delete")), input);
   }
 
+  public Integer vaultCount(VaultCountInput input) throws Exception {
+    URI url = URI.create(
+        kastelaUrl.concat(vaultPath).concat("count"));
+    Map<String, Object> rawData = request("post", url, input);
+    Double result = (Double) rawData.get("count");
+    return result.intValue();
+  }
+
   public void protectionSeal(ArrayList<ProtectionSealInput> input) throws Exception {
     request("post", URI.create(kastelaUrl.concat(protectionPath).concat("seal")), input);
   }
@@ -191,6 +199,22 @@ public class Client {
         URI.create(kastelaUrl.concat(protectionPath).concat("open")), input);
     ArrayList<ArrayList<Object>> result = (ArrayList<ArrayList<Object>>) rawData.get("data");
     return result;
+  }
+
+  public ArrayList<Object> protectionFetch(ProtectionFetchInput input) throws Exception {
+    URI url = URI.create(
+        kastelaUrl.concat(protectionPath).concat("fetch"));
+    Map<String, Object> rawData = request("post", url, input);
+    ArrayList<Object> result = (ArrayList<Object>) rawData.get("primary_keys");
+    return result;
+  }
+
+  public Integer protectionCount(ProtectionCountInput input) throws Exception {
+    URI url = URI.create(
+        kastelaUrl.concat(protectionPath).concat("count"));
+    Map<String, Object> rawData = request("post", url, input);
+    Double result = (Double) rawData.get("count");
+    return result.intValue();
   }
 
   public Object privacyProxyRequest(PrivacyProxyRequestType type, String url, PrivacyProxyRequestMethod method,
