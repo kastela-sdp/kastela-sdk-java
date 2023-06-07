@@ -18,12 +18,9 @@ public class AppTest {
     private static Gson gson = new Gson();
 
     public static void main(String[] args) throws Exception {
-
         Client kastelaClient = new Client("https://127.0.0.1:3100", "credentials/client.crt",
                 "credentials/client.key", "credentials/ca.crt");
-
         port(4000);
-
         post("/api/crypto/encrypt", (req, res) -> {
             try {
                 res.header("Content-Type", "application/json");
@@ -207,21 +204,24 @@ public class AppTest {
         });
         post("/api/vault/fetch", (req, res) -> {
             res.header("Content-Type", "application/json");
-
-            Map<String, String> p = gson.fromJson(req.body(),
-                    new TypeToken<Map<String, String>>() {
+            System.out.println(req.body());
+            Map<String, Object> p = gson.fromJson(req.body(),
+                    new TypeToken<Map<String, Object>>() {
                     }.getType());
+            System.out.println("1");
             Integer size = null;
             if (p.get("size") != null) {
-                size = Integer.parseInt(p.get("size"));
+                size = Integer.parseInt((String) p.get("size"));
             }
+            System.out.println(p);
             try {
                 ArrayList<String> result = kastelaClient
-                        .vaultFetch(new VaultFetchInput(p.get("vault_id"), p.get("search"),
-                                size, p.get("after")));
+                        .vaultFetch(new VaultFetchInput((String) p.get("vault_id"), p.get("search"),
+                                size, (String) p.get("after")));
                 String resultJson = gson.toJson(result);
                 return resultJson;
             } catch (Exception e) {
+                System.out.println("e");
                 res.status(500);
                 return e.getMessage();
             }
@@ -239,6 +239,23 @@ public class AppTest {
             try {
                 kastelaClient.vaultDelete(input);
                 return "OK";
+            } catch (Exception e) {
+                res.status(500);
+                return e.getMessage();
+            }
+        });
+
+        post("/api/vault/count", (req, res) -> {
+            res.header("Content-Type", "application/json");
+
+            Map<String, String> p = gson.fromJson(req.body(),
+                    new TypeToken<Map<String, Object>>() {
+                    }.getType());
+            try {
+                Integer result = kastelaClient
+                        .vaultCount(new VaultCountInput(p.get("vault_id"), p.get("search")));
+                String resultJson = gson.toJson(result);
+                return resultJson;
             } catch (Exception e) {
                 res.status(500);
                 return e.getMessage();
@@ -276,6 +293,40 @@ public class AppTest {
             }
             try {
                 ArrayList<ArrayList<Object>> result = kastelaClient.protectionOpen(input);
+                String resultJson = gson.toJson(result);
+                return resultJson;
+            } catch (Exception e) {
+                res.status(500);
+                return e.getMessage();
+            }
+        });
+
+        post("/api/protection/fetch", (req, res) -> {
+            res.header("Content-Type", "application/json");
+
+            Map<String, String> p = gson.fromJson(req.body(),
+                    new TypeToken<Map<String, Object>>() {
+                    }.getType());
+            try {
+                ArrayList<Object> result = kastelaClient
+                        .protectionFetch(new ProtectionFetchInput(p.get("protection_id"), p.get("search")));
+                String resultJson = gson.toJson(result);
+                return resultJson;
+            } catch (Exception e) {
+                res.status(500);
+                return e.getMessage();
+            }
+        });
+
+        post("/api/protection/count", (req, res) -> {
+            res.header("Content-Type", "application/json");
+
+            Map<String, String> p = gson.fromJson(req.body(),
+                    new TypeToken<Map<String, Object>>() {
+                    }.getType());
+            try {
+                Integer result = kastelaClient
+                        .protectionCount(new ProtectionCountInput(p.get("protection_id"), p.get("search")));
                 String resultJson = gson.toJson(result);
                 return resultJson;
             } catch (Exception e) {
